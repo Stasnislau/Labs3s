@@ -53,6 +53,18 @@ public:
         {
             this->current = current;
         }
+        t_info getInfo()
+        {
+            return current->info;
+        }
+        t_key getKey()
+        {
+            return current->key;
+        }
+        void setInfo(t_info info)
+        {
+            current->info = info;
+        }
         Iterator &operator++(int)
         {
             if (current != nullptr)
@@ -90,6 +102,7 @@ public:
         {
             return current;
         }
+
     };
     Sequence()
     {
@@ -118,7 +131,8 @@ public:
     {
         return Iterator(tail);
     }
-    bool insert(t_key key, t_info info)
+    // add a new element at the end or head of the sequence depending on the value of toHead, default is to the end
+    bool add(t_key key, t_info info, bool toHead = false)
     {
         if (isEmpty())
         {
@@ -127,11 +141,19 @@ public:
             tail = head;
             return true;
         }
+        if (toHead)
+        {
+            Node *temp = new Node{key, info, head};
+            head = temp;
+            length++;
+            return true;
+        }
         tail->next = new Node{key, info, nullptr};
         tail = tail->next;
         length++;
         return true;
     }
+    // insert after the specified occurrence of the key
     bool insert(t_key key, t_info info, const t_key prevKey, int occurrence = 0)
     {
         Node *temp = find(prevKey, occurrence);
@@ -148,6 +170,7 @@ public:
         }
         return true;
     }
+    // removes the specified occurrence of the key
     bool remove(t_key key, int occ = 0)
     {
         if (isEmpty())
@@ -198,6 +221,7 @@ public:
         }
         return *this;
     }
+    // swaps the elements at the specified occurrences of the keys
     bool moveNodes(t_key key1, t_key key2, int occurrences1 = 0, int occurrences2 = 0)
     {
         Node *temp1 = find(key1, occurrences1);
@@ -228,6 +252,26 @@ public:
         }
         return count;
     }
+    int positionOf(t_key key, int occurrence = 0) const
+    {
+        int count = 0;
+        int position = 0;
+        Node *temp = head;
+        while (temp != nullptr)
+        {
+            if (temp->key == key)
+            {
+                if (count == occurrence)
+                {
+                    return position;
+                }
+                count++;
+            }
+            position++;
+            temp = temp->next;
+        }
+        return -1;
+    }
     bool contains(t_key key) const
     {
         Node *temp = head;
@@ -241,6 +285,7 @@ public:
         }
         return false;
     }
+    // removes all elements from the sequence
     void clear()
     {
         Node *temp = head;
@@ -259,6 +304,11 @@ public:
         try
         {
             Node *temp = other.head;
+            if (other.isEmpty())
+            {
+                out << "Empty sequence" << std::endl;
+                return out;
+            }
             out << "Sequence with length " << other.getLength() << ":\n";
             while (temp != nullptr)
             {
