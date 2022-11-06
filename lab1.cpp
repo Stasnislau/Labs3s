@@ -23,8 +23,8 @@ void splitByPosition(Sequence<t_key, t_info> &seq, int start_pos, int len1, int 
             seq1.add(it->key, it->info);
             if (it == seq.end())
             {
-                cout << "Sequence 1: " << seq1 << endl;
-                cout << "Sequence 2: " << seq2 << endl;
+                cout << "Sequence 1 " << seq1 << endl;
+                cout << "Sequence 2 " << seq2 << endl;
                 return;
             }
             it++;
@@ -34,15 +34,15 @@ void splitByPosition(Sequence<t_key, t_info> &seq, int start_pos, int len1, int 
             seq2.add(it->key, it->info);
             if (it == seq.end())
             {
-                cout << "Sequence 1: " << seq1 << endl;
-                cout << "Sequence 2: " << seq2 << endl;
+                cout << "Sequence 1 " << seq1 << endl;
+                cout << "Sequence 2 " << seq2 << endl;
                 return;
             }
             it++;
         }
     }
-    cout << "Sequence 1: " << seq1 << endl;
-    cout << "Sequence 2: " << seq2 << endl;
+    cout << "Sequence 1 " << seq1 << endl;
+    cout << "Sequence 2 " << seq2 << endl;
 }
 template <typename t_key, typename t_info>
 void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence, int len1, int len2, int count)
@@ -54,12 +54,16 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
     {
         return;
     }
-    int i = 0;
-    while (i < keyOccurrence)
+    int counter = 0;
+    while (true)
     {
         if (it->key == startKey)
         {
-            i++;
+            if (counter == keyOccurrence)
+            {
+                break;
+            }
+            counter++;
         }
         it++;
     }
@@ -70,8 +74,8 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
             seq1.add(it->key, it->info);
             if (it == seq.end())
             {
-                cout << "Sequence 1: " << seq1 << endl;
-                cout << "Sequence 2: " << seq2 << endl;
+                cout << "Sequence 1 " << seq1 << endl;
+                cout << "Sequence 2 " << seq2 << endl;
                 return;
             }
             it++;
@@ -81,15 +85,15 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
             seq2.add(it->key, it->info);
             if (it == seq.end())
             {
-                cout << "Sequence 1: " << seq1 << endl;
-                cout << "Sequence 2: " << seq2 << endl;
+                cout << "Sequence 1 " << seq1 << endl;
+                cout << "Sequence 2 " << seq2 << endl;
                 return;
             }
             it++;
         }
     }
-    cout << "Sequence 1: " << seq1 << endl;
-    cout << "Sequence 2: " << seq2 << endl;
+    cout << "Sequence 1 " << seq1 << endl;
+    cout << "Sequence 2 " << seq2 << endl;
 }
 int main()
 {
@@ -128,7 +132,7 @@ int main()
     {
         it++;
     }
-    it.setInfo(7);
+    it->info = 7;
     cout << seq;
     cout << "-----------------------------------Seventh test----------------------------------" << endl;
     seq.clear();

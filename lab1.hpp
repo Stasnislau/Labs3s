@@ -53,18 +53,6 @@ public:
         {
             this->current = current;
         }
-        t_info getInfo()
-        {
-            return current->info;
-        }
-        t_key getKey()
-        {
-            return current->key;
-        }
-        void setInfo(t_info info)
-        {
-            current->info = info;
-        }
         Iterator &operator++(int)
         {
             if (current != nullptr)
