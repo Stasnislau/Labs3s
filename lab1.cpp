@@ -8,7 +8,7 @@ void splitByPosition(Sequence<t_key, t_info> &seq, int start_pos, int len1, int 
     Sequence<t_key, t_info> seq1;
     Sequence<t_key, t_info> seq2;
     typename Sequence<t_key, t_info>::Iterator it = seq.begin();
-    if (seq.getLength() < start_pos || start_pos < 0)
+    if (seq.getLength() < start_pos || start_pos < 0 || Len1 < 0 || Len2 < 0 || count < 0)
     {
         return;
     }
@@ -50,7 +50,7 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
     Sequence<t_key, t_info> seq1;
     Sequence<t_key, t_info> seq2;
     typename Sequence<t_key, t_info>::Iterator it = seq.begin();
-    if (seq.occurrences(startKey) < keyOccurrence || seq.occurrences(startKey) == 0)
+    if (seq.occurrences(startKey) < keyOccurrence || seq.occurrences(startKey) == 0 || keyOccurrence < 0 || Len1 < 0 || Len2 < 0 || count < 0)
     {
         return;
     }
