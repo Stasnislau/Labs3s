@@ -20,8 +20,7 @@ private:
         {
         }
     };
-    Node *head;
-    Node *tail;
+    Node *head, *tail;
     int length;
     Node *find(t_key key, int occurrence = 0)
     {
@@ -98,14 +97,19 @@ public:
         tail = nullptr;
         length = 0;
     }
-    Sequence(const Sequence &other)
+    Sequence(const Sequence<t_key, t_info> &other)
     {
-        Iterator it = other.begin();
-        while (it != other.end())
+        length = 0;
+        head = nullptr;
+        tail = nullptr;
+        Node *temp = other.head;
+        std::cout << "Copy constructor called" << std::endl;
+        while (temp != nullptr)
         {
-            add(it->key, it->info);
-            it++;
+            add(temp->key, temp->info);
+            temp = temp->next;
         }
+        std::cout << "Copy constructor finished" << std::endl;
     }
     int getLength() const
     {
@@ -118,10 +122,11 @@ public:
     Iterator end()
     {
         return Iterator(tail);
-    }
+    } 
     // add a new element at the end or head of the sequence depending on the value of toHead, default is to the end
     bool add(t_key key, t_info info, bool toHead = false)
     {
+        std::cout << length << std::endl;
         if (isEmpty())
         {
             head = new Node{key, info, tail};
@@ -129,6 +134,7 @@ public:
             tail = head;
             return true;
         }
+        std:: cout << "after first" << std::endl;
         if (toHead)
         {
             Node *temp = new Node{key, info, head};
@@ -200,11 +206,11 @@ public:
         if (this != &other)
         {
             clear();
-            Iterator it = other.begin();
-            while (it != other.end())
+            Node *temp = other.head;
+            while (temp != nullptr)
             {
-                add(it->key, it->info);
-                it++;
+                add(temp->key, temp->info);
+                temp = temp->next;
             }
         }
         return *this;

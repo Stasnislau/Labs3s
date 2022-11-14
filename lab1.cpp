@@ -8,7 +8,7 @@ void splitByPosition(Sequence<t_key, t_info> &seq, int start_pos, int len1, int 
     Sequence<t_key, t_info> seq1;
     Sequence<t_key, t_info> seq2;
     typename Sequence<t_key, t_info>::Iterator it = seq.begin();
-    if (seq.getLength() < start_pos || start_pos < 0 || Len1 < 0 || Len2 < 0 || count < 0)
+    if (seq.getLength() < start_pos || start_pos < 0 || len1 < 0 || len2 < 0 || count < 0)
     {
         return;
     }
@@ -50,7 +50,7 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
     Sequence<t_key, t_info> seq1;
     Sequence<t_key, t_info> seq2;
     typename Sequence<t_key, t_info>::Iterator it = seq.begin();
-    if (seq.occurrences(startKey) < keyOccurrence || seq.occurrences(startKey) == 0 || keyOccurrence < 0 || Len1 < 0 || Len2 < 0 || count < 0)
+    if (seq.occurrences(startKey) < keyOccurrence || seq.occurrences(startKey) == 0 || keyOccurrence < 0 || len1 < 0 || len2 < 0 || count < 0)
     {
         return;
     }
@@ -105,6 +105,8 @@ int main()
     seq.add("second", 2);
     seq.add("third-1", 3);
     seq.add("third-1", 4);
+    Sequence<string, int> seq2(seq);
+    cout << seq2;
     cout << seq;
     cout << "-----------------------------------Second test----------------------------------" << endl;
     seq.remove("third-1");
@@ -165,6 +167,7 @@ int main()
     cout << seq;
     seq.insert("start here, to first", 3, "moved to first");
     seq.remove("moved to first");
-    splitByKey(seq, string("start here, to first"), 0, 2, 3, 3); 
+    splitByKey(seq, string("start here, to first"), 0, 2, 3, 3);
     return 0;
+    // to do cont iterator and using iterator for creating new sequence
 }
