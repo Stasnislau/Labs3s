@@ -1,12 +1,11 @@
 #include <iostream>
 #include "lab1.hpp"
+#include "lab1class.cpp"
 
 using namespace std;
 template <typename t_key, typename t_info>
-void splitByPosition(Sequence<t_key, t_info> &seq, int start_pos, int len1, int len2, int count)
+void splitByPosition(Sequence<t_key, t_info> &seq, int start_pos, int len1, int len2, int count, Sequence<t_key, t_info> &seq1, Sequence<t_key, t_info> &seq2)
 {
-    Sequence<t_key, t_info> seq1;
-    Sequence<t_key, t_info> seq2;
     typename Sequence<t_key, t_info>::Iterator it = seq.begin();
     if (seq.getLength() < start_pos || start_pos < 0 || len1 < 0 || len2 < 0 || count < 0)
     {
@@ -23,8 +22,6 @@ void splitByPosition(Sequence<t_key, t_info> &seq, int start_pos, int len1, int 
             seq1.add(it->key, it->info);
             if (it == seq.end())
             {
-                cout << "Sequence 1 " << seq1 << endl;
-                cout << "Sequence 2 " << seq2 << endl;
                 return;
             }
             it++;
@@ -34,21 +31,15 @@ void splitByPosition(Sequence<t_key, t_info> &seq, int start_pos, int len1, int 
             seq2.add(it->key, it->info);
             if (it == seq.end())
             {
-                cout << "Sequence 1 " << seq1 << endl;
-                cout << "Sequence 2 " << seq2 << endl;
                 return;
             }
             it++;
         }
     }
-    cout << "Sequence 1 " << seq1 << endl;
-    cout << "Sequence 2 " << seq2 << endl;
 }
 template <typename t_key, typename t_info>
-void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence, int len1, int len2, int count)
+void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence, int len1, int len2, int count, Sequence<t_key, t_info> &seq1, Sequence<t_key, t_info> &seq2)
 {
-    Sequence<t_key, t_info> seq1;
-    Sequence<t_key, t_info> seq2;
     typename Sequence<t_key, t_info>::Iterator it = seq.begin();
     if (seq.occurrences(startKey) < keyOccurrence || seq.occurrences(startKey) == 0 || keyOccurrence < 0 || len1 < 0 || len2 < 0 || count < 0)
     {
@@ -74,8 +65,6 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
             seq1.add(it->key, it->info);
             if (it == seq.end())
             {
-                cout << "Sequence 1 " << seq1 << endl;
-                cout << "Sequence 2 " << seq2 << endl;
                 return;
             }
             it++;
@@ -85,15 +74,11 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
             seq2.add(it->key, it->info);
             if (it == seq.end())
             {
-                cout << "Sequence 1 " << seq1 << endl;
-                cout << "Sequence 2 " << seq2 << endl;
                 return;
             }
             it++;
         }
     }
-    cout << "Sequence 1 " << seq1 << endl;
-    cout << "Sequence 2 " << seq2 << endl;
 }
 int main()
 {
@@ -105,13 +90,13 @@ int main()
     seq.add("second", 2);
     seq.add("third-1", 3);
     seq.add("third-1", 4);
-    Sequence<string, int> seq2(seq);
-    cout << seq2;
+    Sequence<string, int> seqTemp(seq);
+    cout << seqTemp;
     cout << seq;
     cout << "-----------------------------------Second test----------------------------------" << endl;
     seq.remove("third-1");
     cout << seq;
-    seq.insert("third-1",3, "second");
+    seq.insert("third-1", 3, "second");
     cout << seq;
     cout << "-----------------------------------Third test-----------------------------------" << endl;
     seq.remove("third-1", 1);
@@ -121,7 +106,7 @@ int main()
     cout << "-----------------------------------Forth test-----------------------------------" << endl;
     seq.remove("new first");
     seq.add("new head, other than new first", 6, true);
-    seq.add("to be swapped with head", 0); 
+    seq.add("to be swapped with head", 0);
     cout << seq;
     cout << "-----------------------------------Fifth test-----------------------------------" << endl;
     seq.moveNodes("to be swapped with head", "new head, other than new first");
@@ -130,7 +115,7 @@ int main()
     seq.remove("new head, other than new first");
     seq.insert("forth", 4, "third-1");
     it = seq.begin();
-    for(int i = 0; i < seq.positionOf("forth",1); i++)
+    for (int i = 0; i < seq.positionOf("forth", 1); i++)
     {
         it++;
     }
@@ -155,19 +140,31 @@ int main()
     seq.add("moved to second", 12);
     seq.add("to remain", 13);
     cout << seq;
-    splitByPosition(seq, 3, 2, 3, 2);
+    Sequence<string, int> seq1;
+    Sequence<string, int> seq2;
+    splitByPosition(seq, 3, 2, 3, 2, seq1, seq2);
+    cout << seq1;
+    cout << seq2;
     cout << "-----------------------------------Ninth test-----------------------------------" << endl;
     seq.remove("to remain", 3);
     seq.add("moved to first", 13);
     seq.add("moved to first", 14);
     seq.add("moved to second, stop here", 15);
+    seq1.clear();
+    seq2.clear();
     cout << seq;
-    splitByPosition(seq, 3, 2, 3, 3);
+    splitByPosition(seq, 3, 2, 3, 3, seq1, seq2);
+    cout << seq1;
+    cout << seq2;
+    seq1.clear();
+    seq2.clear();
     cout << "-----------------------------------Tenth test-----------------------------------" << endl;
     cout << seq;
     seq.insert("start here, to first", 3, "moved to first");
     seq.remove("moved to first");
-    splitByKey(seq, string("start here, to first"), 0, 2, 3, 3);
+    splitByKey(seq, string("start here, to first"), 0, 2, 3, 3, seq1, seq2);
+    cout << seq1;
+    cout << seq2;
     return 0;
     // to do cont iterator and using iterator for creating new sequence
 }
