@@ -4,6 +4,10 @@ template <typename t_key, typename t_info>
 typename Sequence<t_key, t_info>::Node *Sequence<t_key, t_info>::find(t_key key, int occurrence)
 {
     Node *temp = head;
+    if (occurrence < 0)
+    {
+        return nullptr;
+    }
     int count = 0;
     while (temp != nullptr)
     {
@@ -59,14 +63,24 @@ typename Sequence<t_key, t_info>::Iterator &Sequence<t_key, t_info>::Iterator::o
     return *this;
 }
 template <typename t_key, typename t_info>
-typename Sequence<t_key, t_info>::Node &Sequence<t_key, t_info>::Iterator::operator*() const
+t_key Sequence<t_key, t_info>::Iterator::getKey() const
 {
-    return *current;
+    return current->key;
 }
 template <typename t_key, typename t_info>
-typename Sequence<t_key, t_info>::Node *Sequence<t_key, t_info>::Iterator::operator->()
+t_info Sequence<t_key, t_info>::Iterator::getInfo() const
 {
-    return current;
+    return current->info;
+}
+template <typename t_key, typename t_info>
+void Sequence<t_key, t_info>::Iterator::setKey(t_key key)
+{
+    current->key = key;
+}
+template <typename t_key, typename t_info>
+void Sequence<t_key, t_info>::Iterator::setInfo(t_info info)
+{
+    current->info = info;
 }
 template <typename t_key, typename t_info>
 Sequence<t_key, t_info>::Node::Node(t_key key, t_info info, Node *next)
@@ -97,6 +111,17 @@ Sequence<t_key, t_info>::Sequence(const Sequence<t_key, t_info> &other)
     {
         add(temp->key, temp->info);
         temp = temp->next;
+    }
+}
+template <typename t_key, typename t_info>
+Sequence<t_key, t_info>::~Sequence()
+{
+    Node *temp = head;
+    while (temp != nullptr)
+    {
+        Node *temp2 = temp;
+        temp = temp->next;
+        delete temp2;
     }
 }
 template <typename t_key, typename t_info>
@@ -177,6 +202,36 @@ bool Sequence<t_key, t_info>::remove(t_key key, int occ)
     {
         prev = prev->next;
     }
+    prev->next = temp->next;
+    delete temp;
+    length--;
+    if (prev->next == nullptr)
+    {
+        tail = prev;
+    }
+    return true;
+}
+template <typename t_key, typename t_info>
+bool Sequence<t_key, t_info>::removeByPosition(int position)
+{
+    if (position < 0 || position >= length)
+    {
+        return false;
+    }
+    if (position == 0)
+    {
+        Node *temp = head;
+        head = head->next;
+        delete temp;
+        length--;
+        return true;
+    }
+    Node *prev = head;
+    for (int i = 0; i < position - 1; i++)
+    {
+        prev = prev->next;
+    }
+    Node *temp = prev->next;
     prev->next = temp->next;
     delete temp;
     length--;

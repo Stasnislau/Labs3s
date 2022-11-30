@@ -19,7 +19,7 @@ void splitByPosition(Sequence<t_key, t_info> &seq, int start_pos, int len1, int 
     {
         for (int i = 0; i < len1; i++)
         {
-            seq1.add(it->key, it->info);
+            seq1.add(it.getKey(), it.getInfo());
             if (it == seq.end())
             {
                 return;
@@ -28,7 +28,7 @@ void splitByPosition(Sequence<t_key, t_info> &seq, int start_pos, int len1, int 
         }
         for (int i = 0; i < len2; i++)
         {
-            seq2.add(it->key, it->info);
+            seq2.add(it.getKey(), it.getInfo());
             if (it == seq.end())
             {
                 return;
@@ -48,7 +48,7 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
     int counter = 0;
     while (true)
     {
-        if (it->key == startKey)
+        if (it.getKey() == startKey)
         {
             if (counter == keyOccurrence)
             {
@@ -62,7 +62,7 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
     {
         for (int i = 0; i < len1; i++)
         {
-            seq1.add(it->key, it->info);
+            seq1.add(it.getKey(), it.getInfo());
             if (it == seq.end())
             {
                 return;
@@ -71,7 +71,7 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
         }
         for (int i = 0; i < len2; i++)
         {
-            seq2.add(it->key, it->info);
+            seq2.add(it.getKey(), it.getInfo());
             if (it == seq.end())
             {
                 return;
@@ -80,6 +80,7 @@ void splitByKey(Sequence<t_key, t_info> &seq, t_key startKey, int keyOccurrence,
         }
     }
 }
+
 int main()
 {
     // testing the Sequence class, string - key, int - info, but number of the node
@@ -119,7 +120,7 @@ int main()
     {
         it++;
     }
-    it->info = 7;
+    it.setInfo(7);
     cout << seq;
     cout << "-----------------------------------Seventh test----------------------------------" << endl;
     seq.clear();
@@ -165,6 +166,26 @@ int main()
     splitByKey(seq, string("start here, to first"), 0, 2, 3, 3, seq1, seq2);
     cout << seq1;
     cout << seq2;
+    cout << "-----------------------------------Wrong parameters test-------------------------" << endl;
+    seq.clear();
+    seq1.clear();
+    seq2.clear();
+    seq.add("first", 1);
+    seq.add("second", 2);
+    cout << seq;
+    seq.remove("third",-2);
+    cout << seq;
+    seq.remove("third", 1);
+    cout << seq;
+    seq.remove("second", -1);
+    cout << seq;
+    seq.insert("third", 3, "not-existing");
+    splitByKey(seq, string("non-existing"), 0, 2, 3, 3, seq1, seq2);
+    splitByPosition(seq, -1, 2, 3, 3, seq1, seq2);
+    cout << seq;
+
+    
+    cout << "------------------------------------Test end-------------------------------------" << endl;
     return 0;
     // to do cont iterator and using iterator for creating new sequence
 }

@@ -31,8 +31,15 @@ public:
 
         bool operator==(const Iterator &other) const;
         Iterator &operator=(const Iterator &other);
-        Node &operator*() const;
-        Node *operator->();
+        // returns the key of the node the iterator points to
+        t_key getKey() const;
+        // returns the info of the node the iterator points to
+        t_info getInfo() const;
+        // sets the key of the node the iterator points to
+        void setKey(t_key key);
+        // sets the info of the node the iterator points to
+        void setInfo(t_info info);
+        
     };
     // returns iterator to the first element
     Iterator begin();
@@ -42,9 +49,11 @@ public:
     Sequence();
     // copy constructor
     Sequence(const Sequence<t_key, t_info> &other);
+    // destructor
+    ~Sequence();
     // returns the number of elements in the sequence
     int getLength() const;
-    // add a new element at the end or head of the sequence depending on the value of toHead, default is to the end
+    // add a new element at the end or head of the sequence depending on the value of toHead, default is at the end
     bool add(t_key key, t_info info, bool toHead = false);
     // insert after the specified occurrence of the key
     bool insert(t_key key, t_info info, const t_key prevKey, int occurrence = 0);
@@ -60,6 +69,8 @@ public:
     int occurrences(t_key key) const;
     // returns the position of the specified occurrence of the key in the list
     int positionOf(t_key key, int occurrence = 0) const;
+    // removes an element at the specified position
+    bool removeByPosition(int position);
     // checks if an element with the specified key exists in the sequence
     bool contains(t_key key) const;
     // removes all elements from the sequence
@@ -68,8 +79,7 @@ public:
     // overload of << operator
     friend std::ostream &operator<<(std::ostream &out, Sequence<t_key, t_info> &other)
     {
-         try
-    {
+
         typename Sequence<t_key, t_info>::Node *temp = other.head;
         if (other.isEmpty())
         {
@@ -82,12 +92,7 @@ public:
             out << temp->key << " " << temp->info << std::endl;
             temp = temp->next;
         }
-    }
-    catch (const char *message)
-    {
-        std::cerr << "Error: " << message << '\n';
-    }
-    return out;
+        return out;
     }
 };
 #endif
