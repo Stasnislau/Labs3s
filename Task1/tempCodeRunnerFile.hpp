@@ -1,0 +1,1 @@
+friend std::ostream &operator<<
