@@ -14,27 +14,14 @@ Ring<t_key, t_info>::~Ring()
 template <typename t_key, typename t_info>
 void Ring<t_key, t_info>::insert(t_key key, t_info info, t_key prevKey, int occurrence)
 {
-    if (occurrence < 0 || occurrence > occurrencesOf(prevKey))
+    Node *temp = find(prevKey, occurrence);
+    if (temp == nullptr)
     {
         return;
-    }
-    Node *temp = head;
-    int counter = 0;
-    while (temp->key != prevKey && counter < occurrence)
-    {
-        if (temp->key == prevKey)
-        {
-            counter++;
-        }
-        temp = temp->next;
     }
     if (temp == head)
     {
         pushFront(key, info);
-    }
-    else if (temp == tail)
-    {
-        pushBack(key, info);
     }
     else
     {
@@ -83,6 +70,37 @@ void Ring<t_key, t_info>::pushBack(t_key key, t_info info)
     size++;
 }
 template <typename t_key, typename t_info>
+void Ring<t_key, t_info>::removeByPosition(int position)
+{
+    if (position < 0 || position >= size)
+    {
+        return;
+    }
+    Node *temp = head;
+    for (int i = 0; i < position; i++)
+    {
+        temp = temp->next;
+    }
+    if (temp == head)
+    {
+        head = head->next;
+        delete temp;
+        size--;
+        return;
+    }
+    if (temp == tail)
+    {
+        tail = tail->prev;
+        delete temp;
+        size--;
+        return;
+    }
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
+    delete temp;
+    size--;
+}
+template <typename t_key, typename t_info>
 void Ring<t_key, t_info>::remove(t_key key, int occurrence)
 {
     if (occurrence < 0 || occurrence > occurrencesOf(key))
@@ -112,6 +130,10 @@ void Ring<t_key, t_info>::insertByPosition(t_key key, t_info info, int position)
 {
     if (position < 0 || position > size)
     {
+        if (size == 0 && position == 0)
+        {
+            pushFront(key, info);
+        }
         return;
     }
     if (position == 0)
@@ -177,6 +199,37 @@ bool Ring<t_key, t_info>::contains(t_key key) const
         return true;
     }
     return false;
+}
+template <typename t_key, typename t_info>
+void Ring<t_key, t_info>::remove(Iterator &it)
+{
+
+    if (it.current == nullptr)
+    {
+        return;
+    }
+    Node *temp = it.current;
+    if (temp == head && temp == tail)
+    {
+        delete temp;
+        head = nullptr;
+        tail = nullptr;
+        size = 0;
+        return;
+    }
+    if (temp == head)
+    {
+        head = head->next;
+    }
+    else if (temp == tail)
+    {
+        tail = tail->prev;
+    }
+    it++;
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
+    delete temp;
+    size--;
 }
 template <typename t_key, typename t_info>
 typename Ring<t_key, t_info>::Node *Ring<t_key, t_info>::find(t_key key, int occurrence)
