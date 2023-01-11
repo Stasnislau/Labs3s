@@ -22,6 +22,7 @@ private:
 
     int height(Node *);
     int balance(Node *);
+    Node *clear(Node *);
     Node *leftRotate(Node *);
     Node *rightRotate(Node *);
     Node *insert(Node *, t_key, t_info);
@@ -30,6 +31,7 @@ private:
     Node *minValueNode(Node *);
     Node *print(Node *);
     Node *print(Node *, int);
+    Node *copy(Node *);
 
 public:
     Dictionary();
@@ -38,6 +40,7 @@ public:
 
     void insert(t_key, t_info);
     void remove(t_key);
+    void clear();
     t_info search(t_key);
     void display();
     void displayNode(t_key);
@@ -45,7 +48,6 @@ public:
     Dictionary &operator=(const Dictionary &);
     bool operator==(const Dictionary &);
     bool operator!=(const Dictionary &);
-
 };
 
 #endif

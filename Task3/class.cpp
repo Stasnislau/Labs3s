@@ -291,3 +291,86 @@ bool Dictionary<t_key, t_info>::isEmpty()
 {
     return root == nullptr;
 }
+
+template <typename t_key, typename t_info>
+bool Dictionary<t_key, t_info>::operator!=(const Dictionary<t_key, t_info> &other)
+{
+    return root != other.root;
+}
+
+template <typename t_key, typename t_info>
+bool Dictionary<t_key, t_info>::operator==(const Dictionary<t_key, t_info> &other)
+{
+    return root == other.root;
+}
+
+template <typename t_key, typename t_info>
+Dictionary<t_key, t_info>::~Dictionary()
+{
+    clear();
+}
+
+template <typename t_key, typename t_info>
+int Dictionary<t_key, t_info>::balance(Node *node)
+{
+    if (node == nullptr)
+    {
+        return 0;
+    }
+    return height(node->left) - height(node->right);
+}
+
+template <typename t_key, typename t_info>
+Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::clear(Node *node)
+{
+    if (node != nullptr)
+    {
+        clear(node->left);
+        clear(node->right);
+        delete node;
+    }
+}
+
+template <typename t_key, typename t_info>
+void Dictionary<t_key, t_info>::clear()
+{
+    root = clear(root);
+}
+
+template <typename t_key, typename t_info>
+Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::copy(Node *node)
+{
+    if (node == nullptr)
+    {
+        return nullptr;
+    }
+    Node *newNode = new Node;
+    newNode->key = node->key;
+    newNode->info = node->info;
+    newNode->left = copy(node->left);
+    newNode->right = copy(node->right);
+    return newNode;
+}
+
+template <typename t_key, typename t_info>
+Dictionary<t_key, t_info>::Dictionary(const Dictionary<t_key, t_info> &other)
+{
+    root = copy(other.root);
+}
+
+template <typename t_key, typename t_info>
+Dictionary<t_key, t_info> &Dictionary<t_key, t_info>::operator=(const Dictionary<t_key, t_info> &other)
+{
+    if (this != &other)
+    {
+        clear();
+        root = copy(other.root);
+    }
+    return *this;
+}
+
+template <typename t_key, typename t_info>
+void Dictionary<t_key, t_info>::remove(t_key key)
+{
+    root = deleteNode(root, key);
+}
