@@ -80,6 +80,7 @@ public:
     void remove(Iterator &it);
     friend std::ostream &operator<<(std::ostream &out, const Ring<t_key, t_info> &ring)
     {
+        std::cout << "Poshlo po pizde" << std::endl;
         Node *temp = ring.head;
         std::cout << "Ring of length: " << ring.size << std::endl;
         for (int i = 0; i < ring.size; i++)

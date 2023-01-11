@@ -66,6 +66,7 @@ void Ring<t_key, t_info>::pushBack(t_key key, t_info info)
         tail->next = newNode;
         head->prev = newNode;
         tail = newNode;
+        std::cout << head->next << std::endl;
     }
     size++;
 }
