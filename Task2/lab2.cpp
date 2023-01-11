@@ -276,11 +276,13 @@ int main()
     cout << ring3 << endl;
     cout << "-----------------------------------Eighth test-----------------------------------" << endl;
     Ring<int, string> ring4;
+
     ring4.pushBack(1, "one");
     ring4.pushBack(2, "two");
     ring4.pushBack(3, "three");
     ring4.pushBack(4, "four");
     ring4.pushBack(5, "five");
+    cout << "Ring 4: " << '\n' << ring4 << endl;
     Ring<int, string> ring5;
     Ring<int, string> ring6;
     splitByPosition(ring4, 1, true, 4, ring5, true, 2 , ring6, false, 1);
@@ -292,7 +294,15 @@ int main()
     splitByKey(ring4,2, 0, false,  4, ring5, true, 2, ring6, false, 1);
     cout << "Ring 5: " << '\n' << ring5 << endl;
     cout << "Ring 6: " << '\n' << ring6 << endl;
-    cout << "-----------------------------------End of Tests---------------------------------" << endl;
-
+    ring5.clear();
+    ring5.pushBack(1, "one");
+    Ring<Ring<int, string>, int> ring7;
+    cout << "Doshlo do pushback" << endl;
+    ring7.pushBack(ring5, 1);
+    ring7.pushBack(ring5, 2);
+    ring7.pushBack(ring5, 3);
+    cout << "Doshlo do cout" << endl;
+    cout << ring7 << endl;
+    cout << "-----------------------------------End of Tests 1---------------------------------" << endl;
     return 0;
 }
