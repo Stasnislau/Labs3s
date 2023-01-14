@@ -10,9 +10,17 @@ Dictionary<t_key, t_info>::Dictionary()
 }
 
 template <typename t_key, typename t_info>
+Dictionary<t_key, t_info>::Node::Node()
+{
+    height = 0;
+    left = nullptr;
+    right = nullptr;
+}
+
+template <typename t_key, typename t_info>
 Dictionary<t_key, t_info>::~Dictionary()
 {
-    // TODO: implement destructor
+    root = clear(root);
 }
 
 template <typename t_key, typename t_info>
@@ -26,7 +34,7 @@ int Dictionary<t_key, t_info>::height(Node *node)
 }
 
 template <typename t_key, typename t_info>
-int balance(Dictionary<t_key, t_info>::Node *node)
+int Dictionary<t_key, t_info>::balance(Node *node)
 {
     if (node == nullptr)
     {
@@ -36,7 +44,7 @@ int balance(Dictionary<t_key, t_info>::Node *node)
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::leftRotate(Node *node)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::leftRotate(Node *node)
 {
     Node *right = node->right;
     Node *left = right->left;
@@ -51,7 +59,7 @@ Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::leftRotate(Node *nod
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::rightRotate(Node *node)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::rightRotate(Node *node)
 {
     Node *left = node->left;
     Node *right = left->right;
@@ -66,7 +74,7 @@ Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::rightRotate(Node *no
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::insert(Node *node, t_key key, t_info info)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::insert(Node *node, t_key key, t_info info)
 {
     if (node == nullptr)
     {
@@ -88,25 +96,25 @@ Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::insert(Node *node, t
 
     node->height = 1 + max(height(node->left), height(node->right));
 
-    int balance = balance(node);
+    int balanceFactor = balance(node);
 
-    if (balance > 1 && key < node->left->key)
+    if (balanceFactor > 1 && key < node->left->key)
     {
         return rightRotate(node);
     }
 
-    if (balance < -1 && key > node->right->key)
+    if (balanceFactor < -1 && key > node->right->key)
     {
         return leftRotate(node);
     }
 
-    if (balance > 1 && key > node->left->key)
+    if (balanceFactor > 1 && key > node->left->key)
     {
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
 
-    if (balance < -1 && key < node->right->key)
+    if (balanceFactor < -1 && key < node->right->key)
     {
         node->right = rightRotate(node->right);
         return leftRotate(node);
@@ -116,7 +124,7 @@ Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::insert(Node *node, t
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::deleteNode(Node *node, t_key key)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::deleteNode(Node *node, t_key key)
 {
     if (node == nullptr)
     {
@@ -164,25 +172,25 @@ Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::deleteNode(Node *nod
 
     node->height = 1 + max(height(node->left), height(node->right));
 
-    int balance = balance(node);
+    int balanceFactor = balance(node);
 
-    if (balance > 1 && balance(node->left) >= 0)
+    if (balanceFactor > 1 && balance(node->left) >= 0)
     {
         return rightRotate(node);
     }
 
-    if (balance > 1 && balance(node->left) < 0)
+    if (balanceFactor > 1 && balance(node->left) < 0)
     {
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
 
-    if (balance < -1 && balance(node->right) <= 0)
+    if (balanceFactor< -1 && balance(node->right) <= 0)
     {
         return leftRotate(node);
     }
 
-    if (balance < -1 && balance(node->right) > 0)
+    if (balanceFactor < -1 && balance(node->right) > 0)
     {
         node->right = rightRotate(node->right);
         return leftRotate(node);
@@ -192,7 +200,7 @@ Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::deleteNode(Node *nod
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::minValueNode(Node *node)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::minValueNode(Node *node)
 {
     Node *current = node;
 
@@ -205,7 +213,7 @@ Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::minValueNode(Node *n
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::search(Node *node, t_key key)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::search(Node *node, t_key key)
 {
     if (node == nullptr || node->key == key)
     {
@@ -225,22 +233,16 @@ void Dictionary<t_key, t_info>::insert(t_key key, t_info info)
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::deleteNode(Node *node, t_key key)
-{
-    root = deleteNode(root, key);
-}
-
-template <typename t_key, typename t_info>
-t_info Dictionary<t_key, t_info>::search(t_key key)
+std::optional<t_info> Dictionary<t_key, t_info>::search(t_key key)
 {
     Node *node = search(root, key);
     if (node != nullptr)
     {
-        return node->key;
+        return node->info;
     }
     else
     {
-        return optional<t_info>();
+        return {};
     }
 }
 
@@ -251,7 +253,7 @@ void Dictionary<t_key, t_info>::display()
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::print(Node *node)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::print(Node *node)
 {
     if (node != nullptr)
     {
@@ -262,7 +264,7 @@ Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::print(Node *node)
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::print(Node *node, int level)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::print(Node *node, int level)
 {
     if (node != nullptr)
     {
@@ -305,23 +307,7 @@ bool Dictionary<t_key, t_info>::operator==(const Dictionary<t_key, t_info> &othe
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::~Dictionary()
-{
-    clear();
-}
-
-template <typename t_key, typename t_info>
-int Dictionary<t_key, t_info>::balance(Node *node)
-{
-    if (node == nullptr)
-    {
-        return 0;
-    }
-    return height(node->left) - height(node->right);
-}
-
-template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::clear(Node *node)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::clear(Node *node)
 {
     if (node != nullptr)
     {
@@ -329,6 +315,7 @@ Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::clear(Node *node)
         clear(node->right);
         delete node;
     }
+    return nullptr;
 }
 
 template <typename t_key, typename t_info>
@@ -338,7 +325,7 @@ void Dictionary<t_key, t_info>::clear()
 }
 
 template <typename t_key, typename t_info>
-Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::copy(Node *node)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::copy(Node *node)
 {
     if (node == nullptr)
     {
@@ -373,4 +360,14 @@ template <typename t_key, typename t_info>
 void Dictionary<t_key, t_info>::remove(t_key key)
 {
     root = deleteNode(root, key);
+}
+
+template <typename t_key, typename t_info>
+void Dictionary<t_key, t_info>::setInfo(t_key key, t_info info)
+{
+    Node *node = search(root, key);
+    if (node != nullptr)
+    {
+        node->info = info;
+    }
 }

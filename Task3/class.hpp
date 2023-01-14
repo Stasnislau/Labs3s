@@ -2,6 +2,7 @@
 #define DICTIONARY
 
 #include <iostream>
+#include <optional>
 
 template <typename t_key, typename t_info>
 class Dictionary
@@ -16,6 +17,7 @@ private:
         Node *right;
 
         Node(t_key key, t_info info) : key(key), info(info), height(0), left(nullptr), right(nullptr) {}
+        Node();
     };
 
     Node *root;
@@ -41,10 +43,11 @@ public:
     void insert(t_key, t_info);
     void remove(t_key);
     void clear();
-    t_info search(t_key);
+    std::optional<t_info> search(t_key);
     void display();
     void displayNode(t_key);
     bool isEmpty();
+    void setInfo(t_key, t_info);
     Dictionary &operator=(const Dictionary &);
     bool operator==(const Dictionary &);
     bool operator!=(const Dictionary &);
