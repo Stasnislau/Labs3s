@@ -32,7 +32,9 @@ private:
     Node *deleteNode(Node *, t_key);
     Node *minValueNode(Node *);
     Node *print(Node *, int);
+    Node *size(Node *, int &);
     Node *copy(Node *);
+    void inOrderTraversal(Node *, std::pair<t_key, t_info> *, int &);
 
 public:
     Dictionary();
@@ -41,6 +43,7 @@ public:
 
     void insert(t_key, t_info);
     void remove(t_key);
+    int size();
     void clear();
     std::optional<t_info> search(t_key);
     void display();
@@ -50,6 +53,7 @@ public:
     Dictionary &operator=(const Dictionary &);
     bool operator==(const Dictionary &);
     bool operator!=(const Dictionary &);
+    std::pair<t_key, t_info> *getAllElements(int &);
 };
 
 #endif

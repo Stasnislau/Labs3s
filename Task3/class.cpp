@@ -347,3 +347,45 @@ void Dictionary<t_key, t_info>::setInfo(t_key key, t_info info)
         node->info = info;
     }
 }
+
+template <typename t_key, typename t_info>
+int Dictionary<t_key, t_info>::size()
+{
+    return size(root);
+}
+
+template <typename t_key, typename t_info>
+typename Dictionary<t_key, t_info>::Node* Dictionary<t_key, t_info>::size(Node *node, int& length)
+{
+    if (node != nullptr)
+    {
+        length++;
+        size(node->left, length);
+        size(node->right, length);
+    }
+    return node;
+}
+
+template <typename t_key, typename t_info>
+void Dictionary<t_key, t_info>::inOrderTraversal(Node* node, std::pair<t_key, t_info>* result, int &index) 
+{
+    if (node == nullptr) {
+        return;
+    }
+    inOrderTraversal(node->left, result, index);
+    result[index++] = std::make_pair(node->key, node->info);
+    inOrderTraversal(node->right, result, index);
+}
+
+template <typename t_key, typename t_info>
+std::pair<t_key, t_info>* Dictionary<t_key, t_info>::getAllElements(int &length) 
+{
+    size(root, length);
+    std::pair<t_key, t_info> *result = new std::pair<t_key, t_info>[length];
+    int index = 0;
+    inOrderTraversal(root, result, index);
+    cout << "length: " << length << endl;
+
+    return result;
+}
+

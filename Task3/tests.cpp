@@ -48,9 +48,14 @@ void createDictionaryFromFile(Dictionary<string, int> &dict, string fileName)
     }
 }
 
-void ringDictionary(Dictionary<string, int> &dict)
+void ringDictionary(Dictionary<string, int> &dict, Ring<string, int> &ring)
 {
-    
+    int length = 0;
+    auto array = dict.getAllElements(length);
+    for(int i = 0; i < length; i++)
+    {
+        ring.pushBack(array[i].first, array[i].second);
+    }
 }
 
 int main()
@@ -74,6 +79,7 @@ int main()
     cout << "--------------------------Third test--------------------------" << endl;
 
     dict.clear();
+    cout << "Display the tree (should be empty):" << endl;
     dict.display();
     cout << "Check if the tree is empty: " << (dict.isEmpty() ? "Yes" : "No")  << endl;
 
@@ -135,9 +141,12 @@ int main()
     cout << "--------------------------Eighth test--------------------------" << endl;
 
     Dictionary<string, int> dict6;
+    createDictionaryFromFile(dict6, "random.txt");
 
+    Ring <string, int> ring;
+    ringDictionary(dict6, ring);
 
-    
+    cout << ring << endl;
 
 
 }
