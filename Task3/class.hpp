@@ -16,14 +16,14 @@ private:
         Node *left;
         Node *right;
 
-        Node(t_key key, t_info info) : key(key), info(info), height(0), left(nullptr), right(nullptr) {}
+        Node(t_key key, t_info info) : key(key), info(info), height(1), left(nullptr), right(nullptr) {}
         Node();
     };
 
     Node *root;
 
     int height(Node *);
-    int balance(Node *);
+    int getBalance(Node *);
     Node *clear(Node *);
     Node *leftRotate(Node *);
     Node *rightRotate(Node *);
@@ -31,7 +31,6 @@ private:
     Node *search(Node *, t_key);
     Node *deleteNode(Node *, t_key);
     Node *minValueNode(Node *);
-    Node *print(Node *);
     Node *print(Node *, int);
     Node *copy(Node *);
 

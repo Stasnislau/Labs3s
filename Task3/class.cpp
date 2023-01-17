@@ -12,7 +12,7 @@ Dictionary<t_key, t_info>::Dictionary()
 template <typename t_key, typename t_info>
 Dictionary<t_key, t_info>::Node::Node()
 {
-    height = 0;
+    height = 1;
     left = nullptr;
     right = nullptr;
 }
@@ -34,7 +34,7 @@ int Dictionary<t_key, t_info>::height(Node *node)
 }
 
 template <typename t_key, typename t_info>
-int Dictionary<t_key, t_info>::balance(Node *node)
+int Dictionary<t_key, t_info>::getBalance(Node *node)
 {
     if (node == nullptr)
     {
@@ -46,81 +46,67 @@ int Dictionary<t_key, t_info>::balance(Node *node)
 template <typename t_key, typename t_info>
 typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::leftRotate(Node *node)
 {
-    Node *right = node->right;
-    Node *left = right->left;
-
-    right->left = node;
-    node->right = left;
-
-    node->height = max(height(node->left), height(node->right)) + 1;
-    right->height = max(height(right->left), height(right->right)) + 1;
-
-    return right;
+    Node *temp = node->right;
+    node->right = temp->left;
+    temp->left = node;
+    node->height = std::max(height(node->left), height(node->right)) + 1;
+    temp->height = std::max(height(temp->left), height(temp->right)) + 1;
+    return temp;
 }
 
 template <typename t_key, typename t_info>
 typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::rightRotate(Node *node)
 {
-    Node *left = node->left;
-    Node *right = left->right;
-
-    left->right = node;
-    node->left = right;
-
-    node->height = max(height(node->left), height(node->right)) + 1;
-    left->height = max(height(left->left), height(left->right)) + 1;
-
-    return left;
+    Node *temp = node->left;
+    node->left = temp->right;
+    temp->right = node;
+    node->height = std::max(height(node->left), height(node->right)) + 1;
+    temp->height = std::max(height(temp->left), height(temp->right)) + 1;
+    return temp;
 }
 
 template <typename t_key, typename t_info>
 typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::insert(Node *node, t_key key, t_info info)
 {
-    if (node == nullptr)
     {
-        return new Node(key, info);
-    }
-
-    if (key < node->key)
-    {
-        node->left = insert(node->left, key, info);
-    }
-    else if (key > node->key)
-    {
-        node->right = insert(node->right, key, info);
-    }
-    else
-    {
+        if (node == nullptr)
+        {
+            return new Node(key, info);
+        }
+        if (key < node->key)
+        {
+            node->left = insert(node->left, key, info);
+        }
+        else if (key > node->key)
+        {
+            node->right = insert(node->right, key, info);
+        }
+        else
+        {
+            return node;
+        }
+        node->height = std::max(height(node->left), height(node->right)) + 1;
+        int balance = getBalance(node);
+        if (balance > 1 && key < node->left->key)
+        {
+            return rightRotate(node);
+        }
+        if (balance < -1 && key > node->right->key)
+        {
+            return leftRotate(node);
+        }
+        if (balance > 1 && key > node->left->key)
+        {
+            node->left = leftRotate(node->left);
+            return rightRotate(node);
+        }
+        if (balance < -1 && key < node->right->key)
+        {
+            node->right = rightRotate(node->right);
+            return leftRotate(node);
+        }
         return node;
     }
-
-    node->height = 1 + max(height(node->left), height(node->right));
-
-    int balanceFactor = balance(node);
-
-    if (balanceFactor > 1 && key < node->left->key)
-    {
-        return rightRotate(node);
-    }
-
-    if (balanceFactor < -1 && key > node->right->key)
-    {
-        return leftRotate(node);
-    }
-
-    if (balanceFactor > 1 && key > node->left->key)
-    {
-        node->left = leftRotate(node->left);
-        return rightRotate(node);
-    }
-
-    if (balanceFactor < -1 && key < node->right->key)
-    {
-        node->right = rightRotate(node->right);
-        return leftRotate(node);
-    }
-
-    return node;
 }
 
 template <typename t_key, typename t_info>
@@ -172,25 +158,25 @@ typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::deleteNode(
 
     node->height = 1 + max(height(node->left), height(node->right));
 
-    int balanceFactor = balance(node);
+    int balanceFactor = getBalance(node);
 
-    if (balanceFactor > 1 && balance(node->left) >= 0)
+    if (balanceFactor > 1 && getBalance(node->left) >= 0)
     {
         return rightRotate(node);
     }
 
-    if (balanceFactor > 1 && balance(node->left) < 0)
+    if (balanceFactor > 1 && getBalance(node->left) < 0)
     {
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
 
-    if (balanceFactor< -1 && balance(node->right) <= 0)
+    if (balanceFactor < -1 && getBalance(node->right) <= 0)
     {
         return leftRotate(node);
     }
 
-    if (balanceFactor < -1 && balance(node->right) > 0)
+    if (balanceFactor < -1 && getBalance(node->right) > 0)
     {
         node->right = rightRotate(node->right);
         return leftRotate(node);
@@ -249,18 +235,7 @@ std::optional<t_info> Dictionary<t_key, t_info>::search(t_key key)
 template <typename t_key, typename t_info>
 void Dictionary<t_key, t_info>::display()
 {
-    print(root);
-}
-
-template <typename t_key, typename t_info>
-typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::print(Node *node)
-{
-    if (node != nullptr)
-    {
-        print(node->left);
-        cout << node->key << " ";
-        print(node->right);
-    }
+    print(root, 0);
 }
 
 template <typename t_key, typename t_info>
@@ -271,21 +246,22 @@ typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::print(Node 
         print(node->right, level + 1);
         for (int i = 0; i < level; i++)
         {
-            cout << "    ";
+            std::cout << "    ";
         }
-        cout << node->key << endl;
+        std::cout << node->key << "(" << node->info << ")" << std::endl;
         print(node->left, level + 1);
     }
+    return node;
 }
 
 template <typename t_key, typename t_info>
 void Dictionary<t_key, t_info>::displayNode(t_key key)
 {
-    Node *node = search(root, key);
-    if (node != nullptr)
-    {
-        print(node);
-    }
+    Node *temp = search(root, key);
+    if (temp == nullptr)
+        std::cout << "Key not found" << std::endl;
+    else
+        print(temp, 0);
 }
 
 template <typename t_key, typename t_info>
