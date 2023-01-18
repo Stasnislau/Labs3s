@@ -35,13 +35,13 @@ void createDictionaryFromFile(Dictionary<string, int> &dict, string fileName)
             pos++;
             if(word != "")
             {
-                if(!dict.search(word))
+                if(!dict.isPresent(word))
                 {
                     dict.insert(word, 1);
                 }
                 else
                 {
-                    dict.setInfo(word, dict.search(word).value() + 1);
+                    dict.setInfo(word, dict.search(word) + 1);
                 }
             }
         }
@@ -56,7 +56,6 @@ void ringDictionary(Dictionary<string, int> &dict, Ring<string, int> &ring)
     {
         ring.pushBack(array[i].first, array[i].second);
     }
-    cout << array << endl;
 }
 
 int main()
@@ -92,8 +91,8 @@ int main()
     dict2.insert("three", 3);
     dict2.insert("four", 4);
     dict2.displayNode("two");
-    dict2.search("two") == 2 ? cout << "Yes" << endl : cout << "No" << endl;
-    dict2.search("five") ? cout << "Yes" << endl : cout << "No" << endl;
+    dict2.isPresent("two")  ? cout << "Yes" << endl : cout << "No" << endl;
+    dict2.isPresent("five") ? cout << "Yes" << endl : cout << "No" << endl;
     dict2.remove("two");
     dict2.displayNode("two");
 
@@ -151,6 +150,4 @@ int main()
     cout << ring << endl;
 
     cout << "End of tests--------------------------------------------------" << endl;
-
-
 }

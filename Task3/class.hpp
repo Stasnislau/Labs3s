@@ -64,8 +64,6 @@ public:
     int size();
     // clears the tree using recursive function clear
     void clear();
-    // searches for a node with the given key using recursive function search, returns the info of the node if found or an empty optional if not found
-    std::optional<t_info> search(t_key);
     // prints the tree using recursive function print
     void display();
     // prints the node with the given key
@@ -74,8 +72,12 @@ public:
     bool isEmpty();
     // sets the info of the node with the given key to the given info
     void setInfo(t_key, t_info);
-    // returns array of all elements of the tree using recursive function inOrderTraversal in the form of a std::pair<t_key, t_info> and the size is provided by reference in the parameters
+    // returns the info of the node with the given key
+    t_info search(t_key);
+    // returns array of all elements of the tree using recursive function inOrderTraversal in the form of a std::pair<t_key, t_info> and the size is provided by reference
     std::pair<t_key, t_info> *getAllElements(int &);
+    // returns true if the node with the given key is present in the tree, false otherwise
+    bool isPresent(t_key);
 
     Dictionary &operator=(const Dictionary &);
     bool operator==(const Dictionary &);

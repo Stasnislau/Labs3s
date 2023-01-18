@@ -1,6 +1,5 @@
 #include <iostream>
 #include "class.hpp"
-#include <optional>
 using namespace std;
 
 template <typename t_key, typename t_info>
@@ -219,20 +218,6 @@ void Dictionary<t_key, t_info>::insert(t_key key, t_info info)
 }
 
 template <typename t_key, typename t_info>
-std::optional<t_info> Dictionary<t_key, t_info>::search(t_key key)
-{
-    Node *node = search(root, key);
-    if (node != nullptr)
-    {
-        return node->info;
-    }
-    else
-    {
-        return {};
-    }
-}
-
-template <typename t_key, typename t_info>
 void Dictionary<t_key, t_info>::display()
 {
     print(root, 0);
@@ -355,7 +340,7 @@ int Dictionary<t_key, t_info>::size()
 }
 
 template <typename t_key, typename t_info>
-typename Dictionary<t_key, t_info>::Node* Dictionary<t_key, t_info>::size(Node *node, int& length)
+typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::size(Node *node, int &length)
 {
     if (node != nullptr)
     {
@@ -367,9 +352,10 @@ typename Dictionary<t_key, t_info>::Node* Dictionary<t_key, t_info>::size(Node *
 }
 
 template <typename t_key, typename t_info>
-void Dictionary<t_key, t_info>::inOrderTraversal(Node* node, std::pair<t_key, t_info>* result, int &index) 
+void Dictionary<t_key, t_info>::inOrderTraversal(Node *node, std::pair<t_key, t_info> *result, int &index)
 {
-    if (node == nullptr) {
+    if (node == nullptr)
+    {
         return;
     }
     inOrderTraversal(node->left, result, index);
@@ -378,7 +364,7 @@ void Dictionary<t_key, t_info>::inOrderTraversal(Node* node, std::pair<t_key, t_
 }
 
 template <typename t_key, typename t_info>
-std::pair<t_key, t_info>* Dictionary<t_key, t_info>::getAllElements(int &length) 
+std::pair<t_key, t_info> *Dictionary<t_key, t_info>::getAllElements(int &length)
 {
     size(root, length);
     std::pair<t_key, t_info> *result = new std::pair<t_key, t_info>[length];
@@ -388,3 +374,31 @@ std::pair<t_key, t_info>* Dictionary<t_key, t_info>::getAllElements(int &length)
     return result;
 }
 
+template <typename t_key, typename t_info>
+bool Dictionary<t_key, t_info>::isPresent(t_key key)
+{
+    Node *node = search(root, key);
+    if (node != nullptr)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+template <typename t_key, typename t_info>
+t_info Dictionary<t_key, t_info>::search(
+    t_key key)
+{
+    Node *node = search(root, key);
+    if (node != nullptr)
+    {
+        return node->info;
+    }
+    else
+    {
+        throw std::invalid_argument("Key not found");
+    }
+}
