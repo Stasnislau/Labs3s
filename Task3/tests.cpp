@@ -56,6 +56,7 @@ void ringDictionary(Dictionary<string, int> &dict, Ring<string, int> &ring)
     {
         ring.pushBack(array[i].first, array[i].second);
     }
+    cout << array << endl;
 }
 
 int main()
@@ -150,5 +151,6 @@ int main()
     cout << ring << endl;
 
     cout << "End of tests--------------------------------------------------" << endl;
+
 
 }
