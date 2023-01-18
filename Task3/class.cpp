@@ -384,7 +384,6 @@ std::pair<t_key, t_info>* Dictionary<t_key, t_info>::getAllElements(int &length)
     std::pair<t_key, t_info> *result = new std::pair<t_key, t_info>[length];
     int index = 0;
     inOrderTraversal(root, result, index);
-    cout << "length: " << length << endl;
 
     return result;
 }

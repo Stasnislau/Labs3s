@@ -143,10 +143,12 @@ int main()
     Dictionary<string, int> dict6;
     createDictionaryFromFile(dict6, "random.txt");
 
+    cout << "--------------------------Ninth test--------------------------" << endl;
     Ring <string, int> ring;
     ringDictionary(dict6, ring);
 
     cout << ring << endl;
 
+    cout << "End of tests--------------------------------------------------" << endl;
 
 }
