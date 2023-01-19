@@ -1,5 +1,6 @@
 #include "class.hpp"
 #include "class.cpp"
+#include <vector>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -51,8 +52,8 @@ void createDictionaryFromFile(Dictionary<string, int> &dict, string fileName)
 void ringDictionary(Dictionary<string, int> &dict, Ring<string, int> &ring)
 {
     int length = 0;
-    auto array = dict.getAllElements(length);
-    for(int i = 0; i < length; i++)
+    auto array = dict.getAllElements();
+    for(int i = 0; i < array.size(); i++)
     {
         ring.pushBack(array[i].first, array[i].second);
     }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "class.hpp"
+#include <vector>
 using namespace std;
 
 template <typename t_key, typename t_info>
@@ -352,25 +353,26 @@ typename Dictionary<t_key, t_info>::Node *Dictionary<t_key, t_info>::size(Node *
 }
 
 template <typename t_key, typename t_info>
-void Dictionary<t_key, t_info>::inOrderTraversal(Node *node, std::pair<t_key, t_info> *result, int &index)
+void Dictionary<t_key, t_info>::inOrderTraversal(Node *node, std::vector<std::pair<t_key, t_info>> &result)
 {
     if (node == nullptr)
     {
         return;
     }
-    inOrderTraversal(node->left, result, index);
-    result[index++] = std::make_pair(node->key, node->info);
-    inOrderTraversal(node->right, result, index);
+    inOrderTraversal(node->left, result);
+    result.push_back(std::make_pair(node->key, node->info));
+    inOrderTraversal(node->right, result);
 }
 
 template <typename t_key, typename t_info>
-std::pair<t_key, t_info> *Dictionary<t_key, t_info>::getAllElements(int &length)
+std::vector<std::pair<t_key, t_info>> Dictionary<t_key, t_info>::getAllElements()
 {
+    int length = 0;
     size(root, length);
-    std::pair<t_key, t_info> *result = new std::pair<t_key, t_info>[length];
-    int index = 0;
-    inOrderTraversal(root, result, index);
 
+    std::vector<std::pair<t_key, t_info>> result;
+    result.reserve(length);
+    inOrderTraversal(root, result);
     return result;
 }
 

@@ -2,7 +2,7 @@
 #define DICTIONARY
 
 #include <iostream>
-#include <optional>
+#include <vector>
 
 template <typename t_key, typename t_info>
 class Dictionary
@@ -47,7 +47,7 @@ private:
     // recursive function to copy a node
     Node *copy(Node *);
     // recursive function to get all elements of the tree
-    void inOrderTraversal(Node *, std::pair<t_key, t_info> *, int &);
+    void inOrderTraversal(Node *, std::vector<std::pair<t_key, t_info>> &);
 
 public:
     // constructor
@@ -74,8 +74,8 @@ public:
     void setInfo(t_key, t_info);
     // returns the info of the node with the given key
     t_info search(t_key);
-    // returns array of all elements of the tree using recursive function inOrderTraversal in the form of a std::pair<t_key, t_info> and the size is provided by reference
-    std::pair<t_key, t_info> *getAllElements(int &);
+    // returns vector of all elements of the tree using recursive function inOrderTraversal in the form of a std::pair<t_key, t_info>
+    std::vector<std::pair<t_key, t_info>> getAllElements();
     // returns true if the node with the given key is present in the tree, false otherwise
     bool isPresent(t_key);
 
